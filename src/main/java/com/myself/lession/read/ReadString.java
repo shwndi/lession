@@ -16,57 +16,73 @@ import static com.myself.lession.read.toWav.spiltArtical;
  * @date 2021/8/17
  */
 public class ReadString {
-    private volatile static int number ;
+    private volatile static int number;
     private volatile static int intline;
+
     //用电脑自带的语音读字符串str
     public static void main(String[] args) {
-        String fileName = "E:\\从木叶开始逃亡.txt";
+        String fileName = "E:\\这个选手罪孽深重.txt";
         String s = readFileContent(fileName);
         String[] strings = spiltArtical(s);
-        new Thread(()->{
-            while(true){
-                Scanner input=new Scanner(System.in);
+        new Thread(() -> {
+            while (true) {
+                Scanner input = new Scanner(System.in);
                 String next = input.next();
                 char c = next.charAt(0);
-                switch (c){
+                switch (c) {
                     //暂停
-                    case '0': break;
+                    case '0':
+                        break;
                     //启动
-                    case '1':break;
+                    case '1':
+                        break;
                     //跳转到底章节
                     case '2':
                         System.out.println("章节跳转");
-                        number = Integer.valueOf(next.substring(1,next.length()));
+                        number = Integer.valueOf(next.substring(1, next.length()));
                         break;
                     //跳转的第几行
                     case '3':
                         System.out.println("行数跳转");
-                        intline = Integer.valueOf(next.substring(1,next.length()));
+                        intline = Integer.valueOf(next.substring(1, next.length()));
+                        break;
+                    case '4':
+                        System.out.println("下一章");
+                        number = number + 1;
+                        break;
+                    case '5':
+                        System.out.println("上一章");
+                        number = number - 2;
+                        break;
+                    case '6':
+                        System.out.println("第" + number + "章 第" + intline + "行");
                         break;
                     case '9':
                         demoInfo();
                         break;
+                    default:
+                        System.out.println("请输入正确的指令");
                 }
             }
         }).start();
-        new Thread(()->{
+        new Thread(() -> {
 
-        },"A").start();
-        for (int i = 120; i < strings.length; i++) {
+        }, "A").start();
+        for (int i = 1; i < strings.length; i++) {
             number = i;
-            System.out.println("第"+i+"章");
-            String str = strings[i];
-            String regex = "   ";
-            String[] aaa = str.split(regex);
-            System.out.println(aaa[0]);
-            for ( intline = 0; intline < aaa.length; intline++) {
-                if (number!=i){
-                    i=number;
-                    break;
-                }
-                System.out.println("第"+intline+"行");
-                extracted(aaa[intline]);
-            }
+            extracted(strings[number]);
+//            System.out.println("第" + i + "章");
+//            String str = strings[i];
+//            String regex = "   ";
+//            String[] aaa = str.split(regex);
+//            System.out.println(aaa[0]);
+//            for (intline = 0; intline < aaa.length; intline++) {
+//                extracted(aaa[intline]);
+//                if (number != i) {
+//                    i = number;
+//                    break;
+//                }
+//            }
         }
     }
 
@@ -79,11 +95,16 @@ public class ReadString {
         System.out.println("    1:继续；     例如：“1”       ");
         System.out.println("    2:跳转章节； 例如：“2XXX”    ");
         System.out.println("    3:跳转行数； 例如：“3XXX”    ");
+        System.out.println("    4:下一章；   例如：“4”    ");
+        System.out.println("    5:上一章；   例如：“5”    ");
+        System.out.println("    6:当前位置； 例如：“第X章 第Y行”    ");
+        System.out.println("    9:帮助；     例如：“9”    ");
         System.out.println("*****************************************");
     }
 
     /**
      * 阅读
+     *
      * @param str
      */
     private static void extracted(String str) {

@@ -63,13 +63,13 @@ public class toWav {
     }
 
     public static String[] spiltArtical(String s) {
-        String[] result = s.split("正文 第");
-        for (int i = 1; i < result.length; i++) {
-            int star = result[i].indexOf(" ");
-            int end =result[i].indexOf("   ");
-            String substring = result[i].substring(star, end);
-            System.out.println("第"+i +"章  "+substring);
-        }
+        String[] result = s.split("第.*?章");
+//        for (int i = 1; i < result.length; i++) {
+//            int star = result[i].indexOf(" ");
+//            int end =result[i].indexOf("   ");
+//            String substring = result[i].substring(star, end);
+//            System.out.println("第"+i +"章  "+substring);
+//        }
         return result;
     }
 
