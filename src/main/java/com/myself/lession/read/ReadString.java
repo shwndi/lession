@@ -4,6 +4,8 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import static com.myself.lession.read.toWav.readFileContent;
@@ -16,14 +18,20 @@ import static com.myself.lession.read.toWav.spiltArtical;
  * @date 2021/8/17
  */
 public class ReadString {
-    private volatile static int number;
-    private volatile static int intline;
+    private volatile static int number =27;
+    private volatile static int intline = 0;
 
     //用电脑自带的语音读字符串str
-    public static void main(String[] args) {
-        String fileName = "E:\\这个选手罪孽深重.txt";
-        String s = readFileContent(fileName);
-        String[] strings = spiltArtical(s);
+    public static void main(String[] args) throws InterruptedException {
+        String fileName = "E:\\myProject\\重生之大科学家";
+        String[] fileNames = readFileNames(fileName);
+        for (int i = number; i < fileNames.length; i++) {
+            String readFileName = fileName + "\\" + fileNames[i];
+            String s = readFileContent(readFileName);
+            extracted(s);
+        }
+//        String s = readFileContent(fileName);
+//        String[] strings = spiltArtical(s);
         new Thread(() -> {
             while (true) {
                 Scanner input = new Scanner(System.in);
@@ -65,12 +73,12 @@ public class ReadString {
                 }
             }
         }).start();
-        new Thread(() -> {
-
-        }, "A").start();
-        for (int i = 1; i < strings.length; i++) {
-            number = i;
-            extracted(strings[number]);
+//        new Thread(() -> {
+//
+//        }, "A").start();
+//        for (int i = 1; i < strings.length; i++) {
+//            number = i;
+//            extracted(strings[number]);
 //            System.out.println("第" + i + "章");
 //            String str = strings[i];
 //            String regex = "   ";
@@ -83,7 +91,18 @@ public class ReadString {
 //                    break;
 //                }
 //            }
+    }
+
+    private static String[] readFileNames(String fileName) {
+        File file = new File(fileName);
+        String[] list = file.list();
+        Object[] objects = Arrays.stream(list).sorted((a, b) ->
+                Integer.valueOf(a.substring(0, a.indexOf("_"))) - Integer.valueOf(b.substring(0, b.indexOf("_")))
+        ).toArray();
+        for (int i = 0; i < objects.length; i++) {
+            list[i] = (String) objects[i];
         }
+        return list;
     }
 
     /**

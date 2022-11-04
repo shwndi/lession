@@ -4,6 +4,7 @@ import com.myself.lession.Entity.Title;
 import com.myself.lession.getTxt.DownLoad;
 import com.myself.lession.getTxt.GetUrl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -15,18 +16,19 @@ import java.util.concurrent.TimeUnit;
 public class download {
 
     public static void main(String[] args) {
+        new HashMap<>();
         /**
          * 目录页
          */
-        String url = "http://www.q1xs.com/198_198868/";
+        String url = "https://www.92qb.com/xiaoshuo/13/13487/";
         /**
          * 下载位置
          */
-        String port = "E://myProject//回到民国当小编";
+        String port = "E://myProject//重生之大科学家";
         /**
          * 最前面目录重复章节
          */
-        int index = 9;
+        int index = 0;
         extracted(index,url, port);
     }
 
@@ -34,7 +36,7 @@ public class download {
         GetUrl getUrl = new GetUrl(url);
         List<Title> all = getUrl.getAll();
         List<Title> use = all.subList(n, all.size());
-        use.stream().parallel().forEach(title -> {
+        use.stream().forEach(title -> {
             DownLoad downLoad = new DownLoad(port, title);
             downLoad.writeArticle();
         });

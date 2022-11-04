@@ -1,5 +1,6 @@
 package com.myself.lession.getTxt;
 
+import cn.hutool.http.HttpUtil;
 import com.myself.lession.Entity.Title;
 import org.apache.catalina.connector.OutputBuffer;
 import org.apache.commons.httpclient.HttpClient;
@@ -33,46 +34,47 @@ public class DownLoad {
     }
 
     public String DownLoad() {
+        return HttpUtil.get("https://www.92qb.com/xiaoshuo/13/13487/"+title.getUrl());
         // 输入流
-        InputStream is = null;
-        BufferedReader br = null;
-        StringBuffer result = new StringBuffer();
-        //1，获取页面
-        HttpClient client = new HttpClient();
-        GetMethod method = new GetMethod(title.getUrl());
-        int i = 0;
-        try {
-            i = client.executeMethod(method);
-            if (i != HttpStatus.SC_OK) {
-                return null;
-            }
-            is = method.getResponseBodyAsStream();
-            br = new BufferedReader(new InputStreamReader(is, "GBK"));
-            String temp = null;
-            while ((temp = br.readLine()) != null) {
-                result.append(temp);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (null != br) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != is) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            // 释放连接
-            method.releaseConnection();
-        }
-        return result.toString();
+//        InputStream is = null;
+//        BufferedReader br = null;
+//        StringBuffer result = new StringBuffer();
+//        //1，获取页面
+//        HttpClient client = new HttpClient();
+//        GetMethod method = new GetMethod(title.getUrl());
+//        int i = 0;
+//        try {
+//            i = client.executeMethod(method);
+//            if (i != HttpStatus.SC_OK) {
+//                return null;
+//            }
+//            is = method.getResponseBodyAsStream();
+//            br = new BufferedReader(new InputStreamReader(is, "GBK"));
+//            String temp = null;
+//            while ((temp = br.readLine()) != null) {
+//                result.append(temp);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (null != br) {
+//                try {
+//                    br.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (null != is) {
+//                try {
+//                    is.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            // 释放连接
+//            method.releaseConnection();
+//        }
+//        return result.toString();
     }
 
     //2.解析页面
@@ -81,7 +83,7 @@ public class DownLoad {
             return null;
         }
         Document parse = Jsoup.parse(html);
-        String content = parse.getElementById("content").text();
+        String content = parse.getElementById("htmlContent").text();
         return content;
     }
 
@@ -103,12 +105,14 @@ public class DownLoad {
                     outputStream.write(title.toString().getBytes());
                 }
             }
-            File file = new File(post, title.getName() + ".txt");
+            File file = new File(post, title.getName().replace("**","") + ".txt");
+            System.out.println(file);
             file.createNewFile();
             outputStream = new FileOutputStream(file);
             String s = content.replaceAll(" ", "\r\n");
             outputStream.write(s.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
+            System.out.println(title.getName());
             e.printStackTrace();
         } finally {
             try {

@@ -32,6 +32,12 @@
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.5.8</version>
+        </dependency>
         <!--html解析-->
         <dependency>
             <groupId>org.jsoup</groupId>
